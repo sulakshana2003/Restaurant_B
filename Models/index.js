@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 import MenuItemModel from "./menuItem.js";
 import CategoryItemModel from "./categories.js";
 
-const sequelize = new Sequelize("POS", "res", "Res12345!", {
+const sequelize = new Sequelize("POS", "pos", "2003", {
   dialect: "mssql",
   host: "localhost",
   port: 1433,
