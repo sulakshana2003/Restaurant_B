@@ -19,6 +19,13 @@ function makeOrderNumber(prefix = "ORD") {
   return `${prefix}-${yyyy}${mm}${dd}-${rand}`;
 }
 
+function toDbOrderType(x) {
+  const v = String(x || "").toUpperCase();
+  if (v === "DI") return "DineIn";
+  if (v === "TA") return "TakeAway";
+  return null;
+}
+
 export const placeOrder = async (req, res) => {
   const t = await sequelize.transaction();
   try {
@@ -57,7 +64,7 @@ export const placeOrder = async (req, res) => {
         (x) =>
           x.menuItemId &&
           x.qty > 0 &&
-          (x.orderType === "DI" || x.orderType === "TA")
+          (x.orderType === "DI" || x.orderType === "TA"),
       );
 
     if (normalized.length === 0) {
@@ -82,6 +89,11 @@ export const placeOrder = async (req, res) => {
     const createdOrders = [];
 
     for (const orderType of Object.keys(byType)) {
+      const dbOrderType = toDbOrderType(orderType);
+      if (!dbOrderType) {
+        throw new Error(`Invalid orderType: ${orderType}`);
+      }
+
       const group = byType[orderType];
 
       let totalAmount = 0;
@@ -112,17 +124,17 @@ export const placeOrder = async (req, res) => {
           TableId: openAcc.TableId ?? null,
           CustomerId: openAcc.CustomerId ?? null,
           OpenAccountId: openAcc.Id,
-          OrderType: orderType, // "DI" or "TA"
+          OrderType: dbOrderType, // "DineIn" or "TakeAway"
           OrderStatus: "PROCESSING",
           TotalAmount: totalAmount,
           OrderDate: new Date(),
         },
-        { transaction: t }
+        { transaction: t },
       );
 
       await OrderItem.bulkCreate(
         orderItemRows.map((r) => ({ ...r, OrderId: newOrder.Id })),
-        { transaction: t }
+        { transaction: t },
       );
 
       const full = await Order.findByPk(newOrder.Id, {
@@ -178,6 +190,8 @@ export const cancelOrderItem = async (req, res) => {
     res.json({ success: true, item });
   } catch (err) {
     await t.rollback();
-    res.status(500).json({ error: "Failed to cancel item" });
+    res
+      .status(500)
+      .json({ error: "Failed to cancel item", details: err.message });
   }
 };

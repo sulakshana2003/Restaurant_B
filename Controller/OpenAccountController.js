@@ -1,6 +1,7 @@
 import customer from "../Models/customer.js";
 import db from "../Models/index.js";
-const { OpenAccount, Customer, Order, RestaurantTable } = db;
+const { OpenAccount, Customer, Order, RestaurantTable, OrderItem, MenuItem } =
+  db;
 
 export const startOpenAccount = async (req, res) => {
   const t = await db.sequelize.transaction();
@@ -102,7 +103,7 @@ export const getOpenAccount = async (req, res) => {
 
 export const getOrdersByOpenAccount = async (req, res) => {
   try {
-    const openAccountId = req.params.openAccountId;
+    const { openAccountId } = req.params;
 
     const orders = await Order.findAll({
       where: { OpenAccountId: openAccountId },
@@ -117,7 +118,7 @@ export const getOrdersByOpenAccount = async (req, res) => {
 
     return res.json({ openAccountId, orders });
   } catch (err) {
-    console.error(err);
+    console.error("getOrdersByOpenAccount error:", err);
     return res.status(500).json({ error: "Failed to fetch orders" });
   }
 };

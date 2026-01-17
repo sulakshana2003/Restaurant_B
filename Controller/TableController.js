@@ -65,18 +65,19 @@ export const tableStatus = async (req, res) => {
     }
     return res.status(200).json({
       hasOpenAccount: true,
+      openAccountId: openAcc.Id,
       OpenAccount: {
         Id: openAcc.Id,
         TelephoneNo: openAcc.TelephoneNo,
         Customer: openAcc.Customer,
-        tableId: openAcc.TableId,
-        customerId: openAcc.CustomerId,
+        TableId: openAcc.TableId,
+        CustomerId: openAcc.CustomerId,
       },
       customer: openAcc.Customer
         ? {
             Id: openAcc.Customer.Id,
             CustomerName: openAcc.Customer.CustomerName,
-            phone: openAcc.Customer.TelephoneNo,
+            TelephoneNo: openAcc.Customer.TelephoneNo,
           }
         : null,
       orders: (openAcc.Orders ?? []).map((order) => ({
