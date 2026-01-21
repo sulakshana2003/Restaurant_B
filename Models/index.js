@@ -7,7 +7,7 @@ import OpenAccountModel from "./openAccount.js";
 import OrderModel from "./order.js";
 import OrderItemModel from "./orderItem.js";
 
-const sequelize = new Sequelize("POS", "res", "Res12345!", {
+const sequelize = new Sequelize("POS", "pos", "2003", {
   dialect: "mssql",
   host: "localhost",
   port: 1433,
