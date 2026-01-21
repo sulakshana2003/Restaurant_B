@@ -6,6 +6,8 @@ import CustomerModel from "./customer.js";
 import OpenAccountModel from "./openAccount.js";
 import OrderModel from "./order.js";
 import OrderItemModel from "./orderItem.js";
+import SectionModel from "./section.js";
+import section from "./section.js";
 
 const sequelize = new Sequelize("POS", "pos", "2003", {
   dialect: "mssql",
@@ -26,6 +28,7 @@ const Customer = CustomerModel(sequelize);
 const OpenAccount = OpenAccountModel(sequelize);
 const Order = OrderModel(sequelize);
 const OrderItem = OrderItemModel(sequelize);
+const Section = SectionModel(sequelize);
 
 MenuCategory.hasMany(MenuItem, {
   foreignKey: "MenuCategoryId",
@@ -56,6 +59,10 @@ OrderItem.belongsTo(Order, { foreignKey: "OrderId" });
 MenuItem.hasMany(OrderItem, { foreignKey: "MenuItemId" });
 OrderItem.belongsTo(MenuItem, { foreignKey: "MenuItemId" });
 
+// Section -> OrderItem (Kitchen/Bar routing)
+Section.hasMany(OrderItem, { foreignKey: "SectionId" });
+OrderItem.belongsTo(Section, { foreignKey: "SectionId" });
+
 const db = {
   sequelize,
   MenuItem,
@@ -65,6 +72,7 @@ const db = {
   OpenAccount,
   Order,
   OrderItem,
+  Section,
 };
 
 export default db;

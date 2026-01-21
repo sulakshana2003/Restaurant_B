@@ -6,6 +6,7 @@ import menuItemRouter from "./Routes/MenuItemRoutes.js";
 import tableRouter from "./Routes/TableRoutes.js";
 import OpenAccountRouter from "./Routes/OpenAccountRoutes.js";
 import OrderRouter from "./Routes/orderRoutes.js";
+import stewardrouter from "./Routes/stewardRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +20,7 @@ app.use("/api/menu", menuItemRouter);
 app.use("/api/tables", tableRouter);
 app.use("/api/openAccounts", OpenAccountRouter);
 app.use("/api/orders", OrderRouter);
+app.use("/api/steward", stewardrouter);
 
 (async () => {
   try {

@@ -107,11 +107,11 @@ export const placeOrder = async (req, res) => {
         const price = Number(mi.SellingPrice || 0);
         totalAmount += price * it.qty;
 
-        const stationId = Number(mi.TargetSectionId || mi.SectionId || 1);
+        const sectionId = Number(mi.TargetSectionId || mi.SectionId || 1);
 
         return {
           MenuItemId: it.menuItemId,
-          StationId: stationId,
+          SectionId: sectionId,
           Quantity: it.qty,
           Note: it.note,
           ItemStatus: "Pending",

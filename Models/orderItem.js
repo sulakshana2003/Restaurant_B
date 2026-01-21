@@ -20,7 +20,7 @@ export default (sequelize) => {
         allowNull: false,
       },
 
-      StationId: {
+      SectionId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
@@ -46,7 +46,7 @@ export default (sequelize) => {
       tableName: "OrderItem",
       schema: "Restaurant",
       timestamps: false,
-    }
+    },
   );
 
   return OrderItem;
