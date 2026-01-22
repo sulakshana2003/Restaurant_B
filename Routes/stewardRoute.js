@@ -1,8 +1,12 @@
 import express from "express";
-import { getMonitorItems } from "../Controller/stewardController.js";
+import {
+  getMonitorItems,
+  serveOrderItem,
+} from "../Controller/stewardController.js";
 
 const stewardrouter = express.Router();
 
 stewardrouter.get("/", getMonitorItems);
+stewardrouter.patch("/:id/serve", serveOrderItem);
 
 export default stewardrouter;
